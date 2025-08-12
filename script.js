@@ -1,22 +1,33 @@
-const messageInput = document.getElementById("message-input");
+const numberInput = document.getElementById("number-input");
+const convertBtn = document.getElementById("convert-btn");
 const result = document.getElementById("result");
-const checkMessageButton = document.getElementById("check-message-btn");
 
-const helpRegex = /please help|assist me/i;
-const dollarRegex = /[0-9]+ dollars/i;
+const decimalToBinary = (input) => {
+if (input === 0) {
+    return "";
+  } else {
+    return decimalToBinary(Math.floor(input / 2)) + (input % 2);
+  }
+};
 
-const denyList = [helpRegex, dollarRegex];
-
-const isSpam = (msg) => denyList.some((regex) => regex.test(msg));
-
-checkMessageButton.addEventListener("click", () => {
-  if (messageInput.value === "") {
-    alert("Please enter a message.");
+const checkUserInput = () => {
+  if (
+    !numberInput.value ||
+    isNaN(parseInt(numberInput.value)) ||
+    parseInt(numberInput.value) < 0
+  ) {
+    alert("Please provide a decimal number greater than or equal to 0");
     return;
   }
 
-  result.textContent = isSpam(messageInput.value)
-    ? "Oh no! This looks like a spam message."
-    : "This message does not seem to contain any spam.";
-  messageInput.value = "";
+  decimalToBinary(parseInt(numberInput.value));
+  numberInput.value = "";
+};
+
+convertBtn.addEventListener("click", checkUserInput);
+
+numberInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    checkUserInput();
+  }
 });
